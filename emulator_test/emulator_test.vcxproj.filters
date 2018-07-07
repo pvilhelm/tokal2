@@ -13,5 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\emulator_cpp">
+      <UniqueIdentifier>{57603c9a-9054-4748-89b6-0d978df6fca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\emulator_h">
+      <UniqueIdentifier>{7d9c9f98-ad56-447f-9055-d12ee9d10851}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\emulator_test">
+      <UniqueIdentifier>{4a6d2489-522e-4c88-8460-ce7523416f84}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\catch2\single_include\catch2\catch.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hello_world_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\emulator\cpu.cpp">
+      <Filter>Source Files\emulator_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="test_eflags.cpp">
+      <Filter>Source Files\emulator_test</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
