@@ -114,12 +114,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\catch2\single_include\catch2\catch.hpp" />
+    <ClInclude Include="..\emulator\cpu.h" />
+    <ClInclude Include="..\emulator\cpu_exception.h" />
+    <ClInclude Include="..\emulator\instruction_decoder.h" />
+    <ClInclude Include="..\emulator\memory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\emulator\cpu.cpp" />
+    <ClCompile Include="..\emulator\instruction_decoder.cpp" />
+    <ClCompile Include="..\emulator\memory.cpp" />
     <ClCompile Include="hello_world_test.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_eflags.cpp" />
+    <ClCompile Include="test_instruction_decoder.cpp" />
+    <ClCompile Include="test_memory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

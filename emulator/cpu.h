@@ -2,9 +2,18 @@
 
 #include <string>
 #include <cinttypes>
+#include <vector>
+
 #include "eflags.h"
 
-namespace emul{
+namespace emul_NS{
+
+enum class Cpu_state_Es
+{
+    NORMAL_OPERATION_E,
+    INVALID_INSTRUCTION_E,
+    INTERUPT_E,
+};
 
 class Cpu
 {
@@ -12,6 +21,7 @@ class Cpu
         std::string as_dbg_string();
         std::string regs_dbg_string();
 
+        Cpu_state_Es exec_next();
 
         const size_t n_regs = sizeof(gp_regs) / sizeof(gp_regs[0]);
 
@@ -33,6 +43,10 @@ class Cpu
         uint64_t &R15 = gp_regs[15];
 
         Eflags EFLAGS;
+
+        std::vector<uint8_t> v_instructions;
+        std::vector<uint8_t> v_cdata;
+        std::vector<uint8_t> v_data;
     private:
 
         uint64_t gp_regs[16];

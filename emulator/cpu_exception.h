@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace emul{
+namespace emul_NS{
     enum Cpu_exception_Es
     {
         None_E = -1,

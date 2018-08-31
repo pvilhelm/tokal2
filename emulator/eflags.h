@@ -2,7 +2,7 @@
 
 #include <cinttypes>
 
-namespace emul {
+namespace emul_NS {
 
 class Eflags
 {

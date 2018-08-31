@@ -5,7 +5,7 @@
 TEST_CASE("eflags test")
 { 
     
-    using namespace emul;
+    using namespace emul_NS;
 
     auto BITGET = [](Eflags f, uint32_t n) {return ((f.value) & (1 << (n)) ? 1 : 0);};
 
