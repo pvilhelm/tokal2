@@ -27,37 +27,33 @@ bool Memory::write_to_address08(uint64_t address, uint8_t value)
         uint64_t index = address - stack_address;
         v_stack[index] = value;
         return true;
-    } else if(address >= text_address && address < text_address + text_size) {
-        uint64_t index = address - text_address;
-        v_text[index] = value;
-        return true;
-    }
-
+    } 
     return false;
 }
 
 std::tuple<uint8_t, bool> emul_NS::Memory::read_from_address08(uint64_t address)
 {
-    bool sucess;
     uint8_t value;
 
     if(address >= cdata_address && address < cdata_address + cdata_size) {
-        sucess = true;
-
+        uint64_t index = address - data_address;
+        value = v_data[index];
+        return std::make_tuple(value, true);
     } else if(address >= data_address && address < data_address + data_size) {
         uint64_t index = address - data_address;
-        v_data[index] = value;
-        return true;
+        value = v_data[index];
+        return std::make_tuple(value, true);
     } else if(address >= stack_address && address < stack_address + stack_size) {
         uint64_t index = address - stack_address;
-        v_stack[index] = value;
-        return true;
+        value = v_data[index];
+        return std::make_tuple(value, true);
     } else if(address >= text_address && address < text_address + text_size) {
         uint64_t index = address - text_address;
-        v_text[index] = value;
-        return true;
+        value = v_data[index];
+        return std::make_tuple(value, true);
+    } else {
+        return std::make_tuple(0, false);
     }
-
 }
 
 void emul_NS::Memory::load_text(std::vector<uint8_t> v_text, uint64_t text_address)

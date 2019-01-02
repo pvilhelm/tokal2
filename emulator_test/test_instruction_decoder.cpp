@@ -112,4 +112,348 @@ TEST_CASE("Instructioner decoder")
             REQUIRE(ans.op_type_E == opcode_NS::INVALID_INSTRUCTION_E);
         }
     }
+
+    SECTION("decode modR/M byte")
+    {
+        using namespace emul_NS;
+        using namespace decode_instruction_NS;
+
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 00;
+
+            auto [reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x08;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::C_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x10;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::D_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x18;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::B_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x20;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::SP_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x28;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::BP_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x30;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::SI_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x38;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::DI_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        //rex.B = 1
+        {
+            uint8_t rex_byte = 0b0100'0100;
+            uint8_t modrm_byte = 00;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R8_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0b0100'0100;
+            uint8_t modrm_byte = 0x08;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R9_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0b0100'0100;
+            uint8_t modrm_byte = 0x10;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R10_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0b0100'0100;
+            uint8_t modrm_byte = 0x18;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R11_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0b0100'0100;
+            uint8_t modrm_byte = 0x20;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R12_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0b0100'0100;
+            uint8_t modrm_byte = 0x28;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R13_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0b0100'0100;
+            uint8_t modrm_byte = 0x30;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R14_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0b0100'0100;
+            uint8_t modrm_byte = 0x38;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R15_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+
+
+        //
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 00;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x49;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::C_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::C_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_8_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x8A;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::C_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::D_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_32_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x1B;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::B_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::B_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x24;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::SP_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::SIB_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x2D;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::BP_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::IP_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x36;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::SI_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::SI_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = 0;
+            uint8_t modrm_byte = 0x3f;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::DI_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::DI_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        //rex.B = 1 rex.R = 1
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, true, false, true).value;
+            uint8_t modrm_byte = 00;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R8_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::R8_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, true, false, true).value;
+            uint8_t modrm_byte = 0x09;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R9_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::R9_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, true, false, true).value;
+            uint8_t modrm_byte = 0x12;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R10_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::R10_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, true, false, true).value;
+            uint8_t modrm_byte = 0x1b;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R11_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::R11_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, true, false, true).value;
+            uint8_t modrm_byte = 0x24;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R12_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::SIB_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, true, false, true).value;
+            uint8_t modrm_byte = 0x2D;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R13_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::IP_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, true, false, true).value;
+            uint8_t modrm_byte = 0x36;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R14_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::R14_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, true, false, true).value;
+            uint8_t modrm_byte = 0x3f;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::R15_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::R15_GROUP_E);
+            REQUIRE(effective_address);
+            REQUIRE(disp == MODRM_DISP_Es::disp_0_E);
+        }
+        /////////////////////////////////////////////
+        {
+            uint8_t rex_byte = rex_NS::rex_from_named_bits(false, false, false, false).value;
+            uint8_t modrm_byte = 0xc0;
+
+            auto[reg, mod, disp, effective_address] = decode_modrm_and_rex(rex_byte, modrm_byte);
+            REQUIRE(reg == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(mod == MODRM_SRC_DST_GROUP_Es::A_GROUP_E);
+            REQUIRE(effective_address == false);
+            REQUIRE(disp == MODRM_DISP_Es::INVALID_DISP_E);
+        }
+
+    }
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+/** @file test */
+
+
 #include <cinttypes>
 #include <vector>
 #include <set>
@@ -7,9 +10,18 @@
 
 #include "cpu.h"
 
+/**
+ *  Namespace for the emulator module.
+ */
 namespace emul_NS {
 
+/**
+ *  reg bitfield namespace.
+ */
 namespace reg_NS {
+    /** 
+     *  Enumeration constants of all the different registers. 
+     */
     enum REG_Es
     {
         RAX_E,
@@ -117,10 +129,19 @@ namespace reg_NS {
     };
 }
 
+/** 
+ * Name space for OP-code functionality.
+ */
 namespace opcode_NS {
 
+        /**
+         * The magic number 0x0F which as primary op-code specifies it's a two byte op-code.
+         */
         const uint8_t twobyte_opcode_first_byte = 0x0FU;
 
+        /**
+         * Enumerations constants for all the different op-code groups.
+         */
         enum GROUPING_OPCODE_Es
         {
             INVALID_INSTRUCTION_E,
@@ -273,6 +294,13 @@ namespace opcode_NS {
             XOR_E,
         };
 
+        /**
+         *  A map which maps the key *secondary op-code* from a two byte op-code to the corresponding value op-code group as a GROUPING_OPCODE_Es. 
+         *
+         *  Key: Second op-code byte in a two byte op-code.
+         *
+         *  Value: op-code group as a GROUPING_OPCODE_Es.
+         */
         const std::map<uint8_t, GROUPING_OPCODE_Es> map_byte_to_opcode2b_group{
             {0x00U, GROUP_6_E},
             {0x01U, GROUP_7_E},
@@ -510,6 +538,15 @@ namespace opcode_NS {
             {0xFEU, VADD_E},
         };
 
+        /**
+        *  A map which maps the key *primary op-code* from an one byte op-code to the corresponding value op-code group as a GROUPING_OPCODE_Es.
+        *
+        *  Key:
+        *      First op-code byte in a one byte op-code.
+        *
+        *  Value:
+        *      op-code group as a GROUPING_OPCODE_Es.
+        */
         const std::map<uint8_t, GROUPING_OPCODE_Es> map_byte_to_opcode1b_group{
             {0x00U, ADD_E},
             {0x01U, ADD_E},
@@ -747,48 +784,197 @@ namespace opcode_NS {
 
         };*/
 
+        /**
+         *  Tries to return an op-code group for a given byte assuming it's an one byte op-code.
+         *
+         *  \param byte
+         *      The first byte of the op-code
+         *
+         *  \returns
+         *      Returns the corresponding group or \ref ::GROUPING_OPCODE_Es ::INVALID_INSTRUCTION_E if the byte is not a one byte op-code
+         */
         GROUPING_OPCODE_Es as_1b_opcode(uint8_t byte);
+
+       /**
+        *   Tries to return an op-code group for a given byte assuming it's a two byte op-code.
+        *
+        *   \param byte
+        *       The second byte of an op-code
+        *
+        *   \returns
+        *      Returns the corresponding group or \ref ::GROUPING_OPCODE_Es ::INVALID_INSTRUCTION_E if the byte is not a two byte op-code
+        */
         GROUPING_OPCODE_Es as_2b_opcode(uint8_t byte);
         GROUPING_OPCODE_Es as_3b_opcode(uint8_t byte);
     }
     
+/** Namespace for the ModR/M byte functionality.
+ */
 namespace modrm_NS {
+    /**
+     * Extracts the Mod bitfield from the addressing-form specifier byte, the ModR/M byte.
+     *
+     * The Mod bitfield together with the R/M field specifies 32 values; 8 registers and 24 addressing modes.
+     *
+     * Parameters:
+     *  modrm_byte - The ModR/M byte to extract the bitfield from.
+     *
+     * Returns:
+     *  The mod bitfield in the given ModR/M byte.
+     */
     uint8_t get_mod_bf(uint8_t modrm_byte);
+
+   /**
+    * Extracts the R/M bitfield from the addressing-form specifier byte, the ModR/M byte.
+    *
+    * The R/M bitfield specifies a register as an operand or in combination with the Mod bitfield
+    * to encode an addressing mode.
+    *
+    * Parameters:
+    *  modrm_byte - The ModR/M byte to extract the bitfield from.
+    *
+    * Returns:
+    *  The R/M bitfield in the given ModR/M byte.
+    */
     uint8_t get_rm_bf(uint8_t modrm_byte);
+
+   /**
+    * Extracts the reg/op-code bitfield from the addressing-form specifier byte, the ModR/M byte.
+    *
+    * The reg bitfield specifies a register or 3 bits of op-code info. The primary opcode governs the meaning of
+    * the reg/op-code bitfield.
+    *
+    * Parameters:
+    *  modrm_byte - The ModR/M byte to extract the bitfield from.
+    *
+    * Returns:
+    *  The reg/op-code bitfield in the given ModR/M byte.
+    */
     uint8_t get_reg_bf(uint8_t modrm_byte);
 }
 
+/**  Name space for decode instruction functionality.
+ */
 namespace decode_instruction_NS {
+
+    /**
+     * Container for pointers and type to an instruction placed somewhere in memory.
+     *
+     */
     struct Instruction
     {
+        /** Pointer to start of instruction.
+         */
         std::vector<uint8_t>::const_iterator ins_start;
+        /** Pointer to end of instruction (one byte past the last byte).
+         */
         std::vector<uint8_t>::const_iterator insbuffer_end;
+        /** Op-code group the instruction belongs to. 
+         */
         opcode_NS::GROUPING_OPCODE_Es op_type_E;
     };
 
-    Instruction decode_instruction(std::vector<uint8_t>::const_iterator instruction_start, std::vector<uint8_t>::const_iterator instructionbuffer_end);
+    /** Decodes and returns the type of and memory boundarys of the first instruction from the specified memory location
+     *
+     * \returns An Instruction struct with instruction boundarys and the corrensponding group of the instruction, or GROUPING_OPCODE_Es :: INVALID_INSTRUCTION_E.
+     */
+    Instruction decode_instruction(std::vector<uint8_t>::const_iterator instruction_start,//< Memory position to start decoding from.
+                                   std::vector<uint8_t>::const_iterator instructionbuffer_end);//< The end of the memory buffer (to determine how far to possibly decode).
+
+    enum class MODRM_SRC_DST_GROUP_Es
+    {
+        INVALID_GROUP_E,
+        A_GROUP_E,
+        C_GROUP_E,
+        D_GROUP_E,
+        B_GROUP_E,
+        SP_GROUP_E,
+        BP_GROUP_E,
+        IP_GROUP_E,
+        SI_GROUP_E,
+        DI_GROUP_E,
+        R8_GROUP_E,
+        R9_GROUP_E,
+        R10_GROUP_E,
+        R11_GROUP_E,
+        R12_GROUP_E,
+        R13_GROUP_E,
+        R14_GROUP_E,
+        R15_GROUP_E,
+        SIB_E,
+    };
+
+    enum class MODRM_DISP_Es
+    {
+        INVALID_DISP_E,
+        disp_0_E,
+        disp_8_E,
+        disp_32_E,
+    };
+
+    /** Decode a ModR/M byte and an optional rex byte to yield a target and source register or effective address as groups.
+     *
+     * \param rex_byte The rex byte, or 0 if no such exists.
+     * \param modrm_byte The modR/M byte.
+     *
+     * \returns A tuple with target, source register/effective address and a displacement, as enums, and a boolean 
+     * indicating whether the R/M group is a effective address or not.
+     */
+    std::tuple<MODRM_SRC_DST_GROUP_Es /*reg*/, MODRM_SRC_DST_GROUP_Es /*R/M*/, MODRM_DISP_Es /* displacement */, bool /* R/M is effective address*/> 
+    decode_modrm_and_rex(uint8_t rex_byte, uint8_t modrm_byte);
 }
 
-
-
+/** Namespace for rex prefix byte functionality */
 namespace rex_NS {
+
+    /** Determines if a byte is a rex prefix byte
+     *
+     *  \param byte The byte to test.
+     *
+     * \returns Whether the byte is a rex prefix byte.
+     */
     bool is_REX_byte(uint8_t byte);
 
+    /** Class to represent the rex prefix byte 
+     *
+     */
     struct Rex
     {
         Rex();
+        /** Ctor with specified rex prefix value 
+         *
+         * The argument needs to be a valid rex prefix byte, or an runtime_error will be thrown.
+         *
+         * \param byte The rex prefix byte to assign to the object.
+         */
         Rex(uint8_t byte);
 
+        /** Gets the W bit from the rex prefix byte. 
+         *
+         * The W bit determines whether the operand size is CS.D(efault) or 64 bits.
+         */
         bool get_W(); /* bit 3, w == 1 operand size determined by CS.D, w == 0 gives 64 bit operand size */
+        /** Gets the R bit from the rex prefix byte.
+         *
+         *  The R bit is an extension to the reg field in the ModR/M byte.
+         */
         bool get_R(); /* bit 2, extension to ModR/M reg field */
+        /** Gets the X bit from the rex prefix byte.
+         *
+         *  The X bit is an extension to the SIB byte.
+         */
         bool get_X(); /* bit 1, extension to SIB field */
+        /** Gets the B bit from the rex prefix byte.
+         *
+         *  The B bit is an extension to the R/M field in the ModR/M byte, or the SIB base field or the Op-code reg field.
+         */
         bool get_B(); /* bit 0 extension to ModR/M r/m field, SIB base field or OPcode reg field */
 
         uint8_t value;
     };
 
+    /** Constructs a Rex object from the named bits */
     Rex rex_from_named_bits(bool W, bool R, bool X, bool B);
-
 }
 
 

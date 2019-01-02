@@ -76,6 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\repos\tokal2\emulator;C:\repos\tokal2\catch2\single_include\catch2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -84,6 +85,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\repos\tokal2\emulator;C:\repos\tokal2\catch2\single_include\catch2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,6 +127,7 @@
     <ClCompile Include="..\emulator\memory.cpp" />
     <ClCompile Include="hello_world_test.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="test_cpu.cpp" />
     <ClCompile Include="test_eflags.cpp" />
     <ClCompile Include="test_instruction_decoder.cpp" />
     <ClCompile Include="test_memory.cpp" />

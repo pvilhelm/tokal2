@@ -42,12 +42,12 @@ TEST_CASE("Test memory")
             std::vector<uint8_t> arr{1, 2, 3, 4};
             m.load_text(arr, 0x1000);
 
-            REQUIRE(m.write_to_address08(0x1000, 99));
+            REQUIRE(m.write_to_address08(0x1000, 99) == false);
             REQUIRE(m.write_to_address08(0x1004, 4) == false);
 
-            REQUIRE(m.v_text[0] == 99); 
+            REQUIRE(m.v_text[0] == 1); 
         }
-        { //v_text
+        { //v_stack
             Memory m;
             std::vector<uint8_t> arr{1, 2, 3, 4};
             m.load_stack(arr, 0x1000);
@@ -56,6 +56,30 @@ TEST_CASE("Test memory")
             REQUIRE(m.write_to_address08(0x1004, 4) == false);
 
             REQUIRE(m.v_stack[0] == 99);
+        }
+    }
+
+    SECTION("Test read from address")
+    {
+        using namespace emul_NS;
+
+        { //v_data
+            Memory m;
+            std::vector<uint8_t> arr{0, 0, 0, 0};
+            m.load_data(arr, 0x1000);
+
+            REQUIRE(m.write_to_address08(0x1000, 1));
+            REQUIRE(m.write_to_address08(0x1001, 2));
+            REQUIRE(m.write_to_address08(0x1002, 3));
+            REQUIRE(m.write_to_address08(0x1003, 4));
+            REQUIRE(m.write_to_address08(0x1004, 4) == false);
+
+            REQUIRE(std::get<0>(m.read_from_address08(0x1000)) == 1);
+            REQUIRE(std::get<1>(m.read_from_address08(0x1000)) == true);
+            REQUIRE(std::get<0>(m.read_from_address08(0x1001)) == 2);
+            REQUIRE(std::get<0>(m.read_from_address08(0x1002)) == 3);
+            REQUIRE(std::get<0>(m.read_from_address08(0x1003)) == 4);
+            REQUIRE(std::get<1>(m.read_from_address08(0x1004)) == false);
         }
     }
 

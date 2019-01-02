@@ -65,5 +65,8 @@
     <ClCompile Include="..\emulator\memory.cpp">
       <Filter>Source Files\emulator_cpp</Filter>
     </ClCompile>
+    <ClCompile Include="test_cpu.cpp">
+      <Filter>Source Files\emulator_test</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

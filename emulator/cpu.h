@@ -5,7 +5,11 @@
 #include <vector>
 
 #include "eflags.h"
+#include "memory.h"
 
+/**
+ *  Namespace for the emulator module.
+ */
 namespace emul_NS{
 
 enum class Cpu_state_Es
@@ -14,7 +18,10 @@ enum class Cpu_state_Es
     INVALID_INSTRUCTION_E,
     INTERUPT_E,
 };
-
+/** Class representation of a CPU
+ *
+ *  This class implements a Intel CPU state machine.
+ */
 class Cpu
 {
     public:
@@ -44,9 +51,7 @@ class Cpu
 
         Eflags EFLAGS;
 
-        std::vector<uint8_t> v_instructions;
-        std::vector<uint8_t> v_cdata;
-        std::vector<uint8_t> v_data;
+        Memory memory;
     private:
 
         uint64_t gp_regs[16];
