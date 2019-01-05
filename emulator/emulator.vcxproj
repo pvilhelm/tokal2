@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClCompile Include="cpu.cpp" />
     <ClCompile Include="dummy_main.cpp" />
+    <ClCompile Include="instructions.cpp" />
     <ClCompile Include="instruction_decoder.cpp" />
     <ClCompile Include="memory.cpp" />
   </ItemGroup>
@@ -120,6 +121,7 @@
     <ClInclude Include="cpu.h" />
     <ClInclude Include="cpu_exception.h" />
     <ClInclude Include="eflags.h" />
+    <ClInclude Include="instructions.h" />
     <ClInclude Include="instruction_decoder.h" />
     <ClInclude Include="memory.h" />
   </ItemGroup>

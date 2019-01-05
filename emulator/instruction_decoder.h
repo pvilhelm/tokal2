@@ -881,6 +881,7 @@ namespace decode_instruction_NS {
     Instruction decode_instruction(std::vector<uint8_t>::const_iterator instruction_start,//< Memory position to start decoding from.
                                    std::vector<uint8_t>::const_iterator instructionbuffer_end);//< The end of the memory buffer (to determine how far to possibly decode).
 
+    /* Enumeration of different groups of register/effective address (R/M) and register (reg) operands. */
     enum class MODRM_SRC_DST_GROUP_Es
     {
         INVALID_GROUP_E,
@@ -904,6 +905,7 @@ namespace decode_instruction_NS {
         SIB_E,
     };
 
+    /** Enumeration of displacements for effective addresses. */
     enum class MODRM_DISP_Es
     {
         INVALID_DISP_E,

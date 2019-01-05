@@ -39,6 +39,9 @@
     <ClInclude Include="..\emulator\memory.h">
       <Filter>Header Files\emulator_h</Filter>
     </ClInclude>
+    <ClInclude Include="..\emulator\instructions.h">
+      <Filter>Header Files\emulator_h</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -67,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="test_cpu.cpp">
       <Filter>Source Files\emulator_test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\emulator\instructions.cpp">
+      <Filter>Source Files\emulator_cpp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
